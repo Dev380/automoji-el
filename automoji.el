@@ -6,9 +6,9 @@
 ;; Maintainer: Dev380
 ;; Created: 2025
 ;; Version: 2.3
-;; Package-Requires: ((emacs "29.1") (compat "30"))
+;; Package-Requires: ((emacs "29.1"))
 ;; URL: https://github.com/Dev380/automoji-el
-;; Keywords: completion, emoji
+;; Keywords: completion, abbrev, convenience, text
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -26,7 +26,11 @@
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;;
+
+;; This package provides emoji completion with shortcodes, kind of like `cape-emoji'
+;; but prioritizing discord and github emoji shortcodes when possible and including
+;; a larger list of emojis.
+
 ;;; Code:
 
 (defvar automoji--data nil
