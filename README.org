@@ -1,0 +1,42 @@
+#+title: Automoji 😁 :grin: - autocomplete emojis in Emacs with completion-at-point!
+
+This package uses Emacs's ~completion-at-point~ functions to complete emoji using shortcodes (like =:smile:=) and automatically replace them with real emoji 😄. Inspired by discord's emoji system (which I unfortunately use too frequently) and also based on it (see [[*Data sources][Data sources]]).
+
+* Table of Contents :TOC:
+- [[#usage][Usage]]
+- [[#generatepy][~generate.py~]]
+  - [[#data-sources][Data sources]]
+- [[#comparison-to-cape][Comparison to cape]]
+
+* Usage
+Example configuration with use-package and straight.el:
+#+begin_src elisp
+(use-package automoji
+  :straight (:host github :repo "Dev380/automoji-el" :files ("*.el*" "generated.data"))
+  :config
+  (add-hook 'completion-at-point-functions #'automoji-capf))
+#+end_src
+The important part is adding ~automoji-capf~ to ~completion-at-point-functions~, either manually or through something like ~cape-super-capf~ from [[https://github.com/minad/cape][cape]] (which has an emoji completion-at-point function also, see [[*Comparison to cape][Comparison to cape]]).
+* ~generate.py~
+The emoji list is generated beforehand with generate.py. Run it and it will output a list of emoji with their shortcodes; redirect it to ~generated.data~ to save it.
+#+begin_src shell
+  python3 ./generate.py > generated.data
+#+end_src
+Emoji data is stored in elisp hashtable format, such that we simply have to evaluate the file verbatim to get a lisp object.
+** Data sources
+Multiple shortcode sources are used with each emoji being associated with one shortcode only. The data sources are listed below, from highest priority (its shortcodes will always make it to the generated data) to lowest priority (only used as a fallback).
+*** 🇪🇸 Country flags (highest priority)
+I use country flag emojis quite frequently, so there is a special case handling it. First, a list of flag emoji is extracted using [[https://unicode.org/Public/emoji/latest/emoji-sequences.txt][unicode emoji sequences data]]. Then, using the highest priority, it will re-add github's shortcode for the flags or fall back to using the country name for cases when github uses the 2-letter country code as the shortcode (like =:es:=  and =:tr:=).
+*** 😔 Discord
+Discord's well-hidden emoji data is obtained using [[https://emzi0767.com/][Emzi]]'s [[https://emzi0767.mzgit.io/discord-emoji/discordEmojiMap-canary.min.json][API]]. Thanks! I was planning to add unicode CLDR shortcode data too (which Discord's is based off of) but it was too much work.
+*** 🐙 GitHub
+Unlike discord, github generously provides their emoji shortcodes through a [[https://api.github.com/emojis][public API endpoint]].
+*** 🐦‍⬛ Joypixels (lowest priority)
+The [[https://github.com/joypixels/emoji-toolkit/tree/master/extras/alpha-codes][joypixels emoji toolkit]] has shortcode data that we can borrow. This is at the bottom of the list because it is our fallback - it's pretty comprehensive, but I prefer the Discord & GitHub shortcodes that I'm used to.
+* Comparison to cape
+Automoji has many similarities to ~cape-emoji~ from the [[https://github.com/minad/cape][cape]] package. The main differences are
+- automoji has much more emoji due to cape's reliance on Emacs's native input methods. 👩🏽‍🦽‍➡️ (=:woman_in_manual_wheelchair_facing_right_tone3:=)
+- cape-emoji is probably much more polished. I'm not really that great at elisp, especially compared to minad. 🥺
+- automoji may sometimes display completion candidates off-centre due to an issue with multi-character emojis that I haven't figured out yet. ✨
+- cape-emoji checks completion boundaries with a backwards regex search while automoji just checks the character at point. (This doesn't matter but I found it interesting!) 🙂
+You should probably just use cape-emoji unless you have emoji you need that don't work with it. I personally haven't really thought cape-emoji to be lacking apart from its (lack of) flag support.
