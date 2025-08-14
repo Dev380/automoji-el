@@ -37,7 +37,7 @@
   (let ((current-file
          (if load-in-progress
              load-file-name
-           (buffer-file-name))))
+           (locate-library "automoji.el"))))
     (setq automoji--data
           (car
            (with-temp-buffer
