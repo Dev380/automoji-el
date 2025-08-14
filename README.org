@@ -1,4 +1,4 @@
-#+title: Automoji 😁 :grin: - autocomplete emojis in Emacs with completion-at-point!
+#+title: Automoji 😁 =:grin:= - autocomplete emojis in Emacs with completion-at-point!
 
 This package uses Emacs's ~completion-at-point~ functions to complete emoji using shortcodes (like =:smile:=) and automatically replace them with real emoji 😄. Inspired by discord's emoji system (which I unfortunately use too frequently) and also based on it (see [[*Data sources][Data sources]]).
 
