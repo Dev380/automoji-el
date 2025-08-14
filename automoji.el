@@ -37,7 +37,7 @@
   "Data mapping shortcodes to emojis that will be lazy-loaded.")
 
 (defun automoji--load-data ()
-  "Loads the emoji hashtable from disk."
+  "Load the emoji hashtable from disk."
   (let ((current-file
          (if load-in-progress
              load-file-name
